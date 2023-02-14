@@ -29,17 +29,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 @send_typing_action
 async def message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_user.id in map(int, config.TELEGRAM_USERS):
-        log.trace(f"Received a prompt: {update.message.text}")
-        response = openai_request(prompt=update.message.text)
-        log.trace(f"Received a response: {response}")
-
         try:
-            await update.message.reply_html(
-                f"<b>{update.message.text}</b> {openai_request(prompt=update.message.text)}"
-            )
+            log.trace(f"Received a prompt: {update.message.text}")
+            response = openai_request(prompt=update.message.text)
+
         except RateLimitError as e:
             log.error(e)
-            await update.message.reply_html(f"Something went wrong:\n<code>{e}</code>")
+            await update.message.reply_text(f"Something went wrong with OpenAI: `{e}`")
+
+        else:
+            log.trace(f"Received a response: {response}")
+
+            await update.message.reply_text(
+                f"`{update.message.text}` {response}",
+                # parse_mode="MarkdownV2",
+            )
 
     else:
         log.trace(f"User {update.effective_user.id} not in the list of allowed users")

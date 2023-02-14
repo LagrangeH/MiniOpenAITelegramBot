@@ -20,9 +20,10 @@ class Config:
     TELEGRAM_USERS = env.list("TELEGRAM_USERS", validate=lambda n: all(user.isdecimal() for user in n))
     OPENAI_API_KEY = env.str("OPENAI_API_KEY")
     DEBUG = env.bool("DEBUG", default=False)
+    TRACE_LOG = env.bool("TRACE_LOG", default=False)
 
 
-def setup_logging(log: logger, debug=False):
+def setup_logging(log: logger, debug=False, trace=False):
     log.remove()
 
     if debug:
@@ -37,9 +38,21 @@ def setup_logging(log: logger, debug=False):
             delay=True,
         )
 
+    if trace:
+        log.add(
+            'logs/trace.log',
+            level='TRACE',
+            colorize=False,
+            backtrace=False,
+            diagnose=False,
+            enqueue=True,
+            catch=False,
+            delay=True,
+        )
+
     log.add(
         sys.stdout,
-        level='INFO',
+        level='DEBUG' if debug else 'INFO',
         colorize=True,
         backtrace=debug,
         diagnose=debug,

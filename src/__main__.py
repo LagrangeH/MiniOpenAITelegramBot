@@ -5,7 +5,7 @@ from handlers import start, message
 from loader import config
 
 
-@log.opt(exception=True).catch()
+# @log.opt(exception=True).catch()
 def main() -> None:
     app = ApplicationBuilder().token(config.TELEGRAM_BOT_TOKEN).build()
 

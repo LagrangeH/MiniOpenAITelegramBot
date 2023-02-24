@@ -23,7 +23,7 @@ class Config:
     TRACE_LOG = env.bool("TRACE_LOG", default=False)
 
 
-def setup_logging(log: logger, debug=False, trace=False):
+def setup_logging(log, debug=False, trace=False):
     log.remove()
 
     if debug:

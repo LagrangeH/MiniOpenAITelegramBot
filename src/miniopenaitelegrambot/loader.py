@@ -1,7 +1,7 @@
 import openai
 from loguru import logger as log
 
-from config import Config, setup_logging
+from .config import Config, setup_logging
 
 
 config = Config()

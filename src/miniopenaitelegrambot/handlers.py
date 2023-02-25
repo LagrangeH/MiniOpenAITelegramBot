@@ -6,8 +6,8 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
 
-from loader import config
-from openai_api import openai_request
+from .loader import config
+from .openai_api import openai_request
 
 
 def send_typing_action(func):

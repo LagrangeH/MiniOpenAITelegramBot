@@ -1,8 +1,8 @@
 from loguru import logger as log
 from telegram.ext import filters, ApplicationBuilder, MessageHandler, CommandHandler
 
-from handlers import start, message
-from loader import config
+from .handlers import start, message
+from .loader import config
 
 
 # @log.opt(exception=True).catch()

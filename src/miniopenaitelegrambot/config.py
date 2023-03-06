@@ -3,11 +3,11 @@ import tracemalloc
 
 from dataclasses import dataclass
 
-from environs import Env
+import environs
 from loguru import logger
 
 
-env = Env()
+env = environs.Env()
 env.read_env()
 
 # To get the object allocation traceback when using asynchrony
@@ -16,11 +16,15 @@ tracemalloc.start()
 
 @dataclass
 class Config:
-    TELEGRAM_BOT_TOKEN = env.str("TELEGRAM_BOT_TOKEN")
-    TELEGRAM_USERS = env.list("TELEGRAM_USERS", validate=lambda n: all(user.isdecimal() for user in n))
-    OPENAI_API_KEY = env.str("OPENAI_API_KEY")
-    DEBUG = env.bool("DEBUG", default=False)
-    TRACE_LOG = env.bool("TRACE_LOG", default=False)
+    try:
+        TELEGRAM_BOT_TOKEN = env.str("TELEGRAM_BOT_TOKEN")
+        TELEGRAM_USERS = env.list("TELEGRAM_USERS", validate=lambda n: all(user.isdecimal() for user in n))
+        OPENAI_API_KEY = env.str("OPENAI_API_KEY")
+        DEBUG = env.bool("DEBUG", default=False)
+        TRACE_LOG = env.bool("TRACE_LOG", default=False)
+    except environs.EnvError as e:
+        logger.opt(exception=False).error(e)
+        sys.exit(1)
 
 
 def setup_logging(log, debug=False, trace=False):

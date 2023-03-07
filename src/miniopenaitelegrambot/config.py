@@ -1,6 +1,5 @@
 import sys
 import tracemalloc
-
 from dataclasses import dataclass
 
 import environs
